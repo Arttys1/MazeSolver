@@ -9,10 +9,10 @@ namespace MazeSolver.Métier
     {
         private static Settings instance = null;    //Instance de l'objet, il est unique.
 
-        private double mazeSize;
-        private MazeBuildingAlgorithmType mazeBuildingAlgorithmType;
-        private bool isComplexMaze;
-        private double squareSize;
+        private double squareSize;                                      //représente la taille d'un coté d'une rectangle
+        private double mazeSize;                                        //représente le nombre de case d'un côté du labyrinthe
+        private MazeBuildingAlgorithmType mazeBuildingAlgorithmType;    //représente quel algorithme de construction de labyrinthe va être utilisé.
+        private bool isComplexMaze;                                     //représente si le labyrinthe sera "simple" ou "complexe" (chemin unique ou non)
 
         /// <summary>
         /// Constructeur privée, accessible uniquement depuis la méthode getInstance.
@@ -39,13 +39,17 @@ namespace MazeSolver.Métier
             return instance;
         }
 
+        /// <summary>
+        /// Accesseur et mutateur de la taille du labyrinthe.
+        /// Modifie la taille des rectangles pour que la labyrinthe face environ 500 pixels de côté.
+        /// </summary>
         public double MazeSize
         {
             get => mazeSize;
             set { mazeSize = value; squareSize = System.Math.Round(500 / value); }
         }
-        public bool IsComplexMaze { get => isComplexMaze; set => isComplexMaze = value; }
-        public double SquareSize { get => squareSize; }
-        public MazeBuildingAlgorithmType MazeBuildingAlgorithmType { get => mazeBuildingAlgorithmType; set => mazeBuildingAlgorithmType = value; }
+        public bool IsComplexMaze { get => isComplexMaze; set => isComplexMaze = value; } //Accesseur et mutateur de isComplexMaze
+        public double SquareSize { get => squareSize; } //Accesseur de SquareSize
+        public MazeBuildingAlgorithmType MazeBuildingAlgorithmType { get => mazeBuildingAlgorithmType; set => mazeBuildingAlgorithmType = value; }  //Accesseur et mmutateur de mazeBuildingAlgorithmType
     }
 }

@@ -2,17 +2,9 @@
 using MazeSolver.Métier.Algorithme;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
 using MazeSolver.Métier.Thread;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MazeSolver.Ihm
 {
@@ -21,11 +13,12 @@ namespace MazeSolver.Ihm
     /// </summary>
     public partial class CompareWindow : Window
     {
-        private const double SQUARESIZE = 20;
+        private readonly Maze mazeExhaustiveExploration;        //labyrinthe où sera utilisé l'algorithme d'exploration exhaustive
+        private readonly Maze mazeRandomMergePath;              //labyrinthe où sera utilisé l'algorithme de fusion aléatoire des chemins
 
-        private readonly Maze mazeExhaustiveExploration;
-        private readonly Maze mazeRandomMergePath;
-
+        /// <summary>
+        /// Constructeur
+        /// </summary>
         public CompareWindow()
         {
             InitializeComponent();
@@ -33,6 +26,11 @@ namespace MazeSolver.Ihm
             mazeRandomMergePath = new Maze(gridRandomMergePath);
         }
 
+        /// <summary>
+        /// Méthode pour générer les labyrinthes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GenerateMazes(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -44,6 +42,12 @@ namespace MazeSolver.Ihm
             mazeExhaustiveExploration.UpdateMaze();
             mazeRandomMergePath.UpdateMaze();
         }
+
+        /// <summary>
+        /// Méthode pour résoudre les labyrinthes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResolveMazes(object sender, RoutedEventArgs e)
         {
             

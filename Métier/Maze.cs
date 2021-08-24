@@ -13,8 +13,8 @@ namespace MazeSolver.Métier
     /// </summary>
     public class Maze
     {
-        private readonly Dictionary<Square, Rectangle> mazeRectangle;
-        private readonly Grid grid;
+        private readonly Grid grid;                                         //La grille d'affichage du labyrinthe
+        private readonly Dictionary<Square, Rectangle> mazeRectangle;       //Les rectangles associés à leurs cases
         private readonly Dictionary<Coordinates, Square> mazeSquare;        //Les cases du labyrinthe associé à leurs coordonnées
         private readonly List<Square> walls;                                //La listes de tous les murs intérieurs du labyrinthe
         private readonly List<Square> paths;                                //La listes de tous les cases parcourables du labyrinthe
@@ -22,7 +22,7 @@ namespace MazeSolver.Métier
         private Square end;                                                 //La case d'arrivé du labyrinthe
 
         private readonly int MAZESIZE = (int)Settings.GetInstance().MazeSize;    //Constante représentant la taille d'un coté du labyrinthe
-                                                                            //Le nombre de case total est donc MAZESIZE²
+                                                                                //Le nombre de case total est donc MAZESIZE²
 
         /// <summary>
         /// Constructeur par défaut
@@ -237,6 +237,10 @@ namespace MazeSolver.Métier
             }
         }
 
+        /// <summary>
+        /// Méthode renvoyant tous les rectangles 
+        /// </summary>
+        /// <returns>Tous les rectangles</returns>
         public Dictionary<Square, Rectangle>.ValueCollection GetAllRectangle()
         {
             return mazeRectangle.Values;
