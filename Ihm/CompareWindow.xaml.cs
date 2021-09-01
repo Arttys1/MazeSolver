@@ -3,8 +3,10 @@ using MazeSolver.Métier.Algorithme;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
 using MazeSolver.Métier.Thread;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace MazeSolver.Ihm
 {
@@ -63,9 +65,15 @@ namespace MazeSolver.Ihm
             List<Square> secondPath = dijkstraSecond.GetPath(mazeExhaustiveExploration.End);
 
 
-            new PathDisplayer(firstPath, gridRandomMergePath, mazeRandomMergePath).StartThread();
-            new PathDisplayer(secondPath, gridExhaustiveExploration, mazeExhaustiveExploration).StartThread();
-            
+            PathDisplayer pathDisplayerRandomMergePath = new PathDisplayer(firstPath, gridRandomMergePath, mazeRandomMergePath);
+            pathDisplayerRandomMergePath.StartThread();
+
+            PathDisplayer pathDisplayerExhaustiveExploration = new PathDisplayer(secondPath, gridExhaustiveExploration, mazeExhaustiveExploration);
+            pathDisplayerExhaustiveExploration.StartThread();
+
+            new TimerPath(pathDisplayerRandomMergePath, timerRandomMergePaths);
+            new TimerPath(pathDisplayerExhaustiveExploration, timerExhaustiveExploration);
+
         }
     }
 }

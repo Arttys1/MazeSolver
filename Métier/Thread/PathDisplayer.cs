@@ -17,6 +17,7 @@ namespace MazeSolver.Métier.Thread
         private readonly DispatcherTimer dispatcher;                //Objet permettant d'afficher 1 à 1 les éléments du chemin
         private readonly Grid grid;                                 //Grille d'affichage
         private readonly Maze maze;                                 //Labyrinthe concerné
+        private bool isDispatching;
         private const long NANO_SECOND_TIMER = 1000000;     // this * 100 ~= 0.1 second
                                                             // *100 because TimeSpan use ticks, 1 tick = 100 nanosecond
 
@@ -31,6 +32,7 @@ namespace MazeSolver.Métier.Thread
             this.grid = grid;
             this.maze = maze;
             this.path = path;
+            isDispatching = true;
             dispatcher = new DispatcherTimer(DispatcherPriority.Normal);
             dispatcher.Tick += new EventHandler(DisplayPath);
             dispatcher.Interval = new TimeSpan(NANO_SECOND_TIMER);
@@ -86,6 +88,9 @@ namespace MazeSolver.Métier.Thread
         private void StopThread()
         {
             dispatcher.Stop();
+            isDispatching = false;
         }
+
+        public bool IsDispatching => isDispatching;
     }
 }
