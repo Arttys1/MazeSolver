@@ -17,7 +17,7 @@ namespace MazeSolver.Métier.Thread
         private readonly DispatcherTimer dispatcher;                //Objet permettant d'afficher 1 à 1 les éléments du chemin
         private readonly Grid grid;                                 //Grille d'affichage
         private readonly Maze maze;                                 //Labyrinthe concerné
-        private bool isDispatching;
+        private bool isDispatching;                                 //booléen représentant si PathDiplayer est en fonctionnement ou non
         private const long NANO_SECOND_TIMER = 1000000;     // this * 100 ~= 0.1 second
                                                             // *100 because TimeSpan use ticks, 1 tick = 100 nanosecond
 
@@ -91,6 +91,6 @@ namespace MazeSolver.Métier.Thread
             isDispatching = false;
         }
 
-        public bool IsDispatching => isDispatching;
+        public bool IsDispatching => isDispatching;     //Accesseur de isDispatching
     }
 }
