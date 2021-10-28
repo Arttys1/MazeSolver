@@ -196,6 +196,7 @@ namespace MazeSolver.Métier
             {
                 case MazeBuildingAlgorithmType.RandomMergePaths: algorithm = new RandomMergePaths(this, walls, paths); break;
                 case MazeBuildingAlgorithmType.ExhaustiveExploration: algorithm = new ExplorationExhaustive(this, walls, paths); break;
+                case MazeBuildingAlgorithmType.AldousBroder: algorithm = new Aldous_Broder(this, walls, paths); break;
                 default: throw new Exception("Unimplemented maze solving algorithm");
             }
 

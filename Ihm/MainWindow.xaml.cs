@@ -3,6 +3,7 @@ using MazeSolver.Métier;
 using MazeSolver.Métier.Algorithme;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
 using MazeSolver.Métier.Thread;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -24,7 +25,7 @@ namespace MazeSolver
         {
             InitializeComponent();
             maze = new Maze(grid);
-            AddMouseEnter();            
+            AddMouseEnter();
         }
 
         /// <summary>
@@ -34,12 +35,22 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void CreateRandomMaze(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            button.IsEnabled = false;
+            if (sender is Button button)
+            {
+                try
+                {
+                    button.IsEnabled = false;
 
-            maze.CreateRandomMaze(Settings.GetInstance().MazeBuildingAlgorithmType);            
+                    maze.CreateRandomMaze(Settings.GetInstance().MazeBuildingAlgorithmType);
 
-            maze.UpdateMaze();
+                    maze.UpdateMaze();
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show(x.Message);
+                    button.IsEnabled = true;
+                }
+            }
         }
 
         /// <summary>
@@ -64,7 +75,7 @@ namespace MazeSolver
             double squareSize = Settings.GetInstance().SquareSize;
             double x = (rectangle.Margin.Left - 10) / squareSize;
             double y = (rectangle.Margin.Top - 10) / squareSize;
-            CoordinatesLabel.Content = "(" + x + "/" + y +")";
+            CoordinatesLabel.Content = "(" + x + "/" + y + ")";
         }
 
         /// <summary>
@@ -123,31 +134,11 @@ namespace MazeSolver
                 default: throw new System.Exception("SelectedIndex non-implémented !");
             }
 
-            if(SquareSizeLabel != null)
+            if (SquareSizeLabel != null)
             {
                 SquareSizeLabel.Content = settings.SquareSize;
             }
             ResetMaze(null, null);
-        }
-
-        /// <summary>
-        /// Méthode permettant de gérer l'évenement de check le radio button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RadioBuildingAlgorithmType_Checked(object sender, RoutedEventArgs e)
-        {
-            MazeBuildingAlgorithmType mazeBuildingAlgorithmType = MazeBuildingAlgorithmType.ExhaustiveExploration;
-            if (radioExhaustiveExploration.IsChecked == true)
-            {
-                mazeBuildingAlgorithmType = MazeBuildingAlgorithmType.ExhaustiveExploration;
-            }
-            else if(radioRandomMergePath.IsChecked == true)
-            {
-                mazeBuildingAlgorithmType = MazeBuildingAlgorithmType.RandomMergePaths;
-            }
-
-            Settings.GetInstance().MazeBuildingAlgorithmType = mazeBuildingAlgorithmType;
         }
 
         /// <summary>
@@ -168,5 +159,31 @@ namespace MazeSolver
                 Settings.GetInstance().IsComplexMaze = false;
             }
         }
-    }
+
+        private void InitAlgoType(object sender, System.EventArgs e)
+        {
+            CBAlgoType.Items.Clear();
+            foreach (MazeBuildingAlgorithmType algo in Enum.GetValues(typeof(MazeBuildingAlgorithmType)))
+            {
+                CBAlgoType.Items.Add(algo);
+            }
+            CBAlgoType.SelectedIndex = 0;
+        }
+
+        private void AlgoTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox cb)
+            {
+                try
+                {
+                    MazeBuildingAlgorithmType type = (MazeBuildingAlgorithmType)cb.SelectedItem;
+                    Settings.GetInstance().MazeBuildingAlgorithmType = type;
+
+                } catch (Exception x)
+                {
+                    MessageBox.Show(x.Message);
+                } 
+            }
+        }
+    } 
 }

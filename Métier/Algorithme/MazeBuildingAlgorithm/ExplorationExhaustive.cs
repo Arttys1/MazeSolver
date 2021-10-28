@@ -149,7 +149,6 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
                         adjacentsSquares.Add(secondSquare);
                     }
                 }
-
             }
 
             return adjacentsSquares;
