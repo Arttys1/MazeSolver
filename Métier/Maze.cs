@@ -109,13 +109,29 @@ namespace MazeSolver.Métier
             mazeSquare.TryGetValue(coordinates, out Square value);
             return value;
         }
-        public Square Start => start;   //Accesseur renvoyant la case de départ du labyrinthe
-        public Square End => end;       //Accesseur renvoyant la case d'arrivé du labyrinthe
+        /// <summary>
+        /// Accesseur renvoyant la case de départ du labyrinthe
+        /// </summary>
+        public Square Start => start;
 
+        /// <summary>
+        /// //Accesseur renvoyant la case d'arrivé du labyrinthe
+        /// </summary>
+        public Square End => end;       
+
+        /// <summary>
+        /// Accesseur renvoyant les murs du labyrinthe
+        /// </summary>
         public List<Square> Walls => walls;
 
+        /// <summary>
+        /// Accesseur renvoyant les chemins du labyrinthe
+        /// </summary>
         public List<Square> Paths => paths;
 
+        /// <summary>
+        /// Méthode détruisant 1/5ème des murs du labyrinthe. Cela permet d'avoir plusieurs chemins
+        /// </summary>
         public void ComplexifyMaze()
         {
             for (int i = 0; i < walls.Count / 5; i++)

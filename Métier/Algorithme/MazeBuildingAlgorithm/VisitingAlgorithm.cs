@@ -5,17 +5,26 @@ using System.Text;
 
 namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
 {
+    /// <summary>
+    /// Classe abstraite implémentant MazeBuildingAlgorithm, représentant les algorithmes de génération de labyrinte ayant besoin de connaître les cases visités
+    /// </summary>
     public abstract class VisitingAlgorithm : MazeBuildingAlgorithm
     {
-        private readonly Dictionary<Square, bool> isVisited;
+        private readonly Dictionary<Square, bool> isVisited;    //Les cases visités du labyrinthe
 
         protected VisitingAlgorithm(MazeController mazeController, List<Square> walls, List<Square> paths) : base(mazeController, walls, paths)
         {
             isVisited = new Dictionary<Square, bool>();
         }
 
+        /// <summary>
+        /// Accesseur de la liste des cases visités
+        /// </summary>
         public Dictionary<Square, bool> IsVisited => isVisited;
 
+        /// <summary>
+        /// Méthode permettant l'initialisation de l'algorithme. Peut être Surchargé ou masqué.
+        /// </summary>
         protected virtual void Initialisation()
         {
             isVisited.Clear();

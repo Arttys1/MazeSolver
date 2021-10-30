@@ -4,7 +4,6 @@ using MazeSolver.Métier.Algorithme;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,13 +11,16 @@ using System.Windows.Shapes;
 
 namespace MazeSolver.Ihm
 {
+    /// <summary>
+    /// Classe intermédiaire entre l'ihm et le model. Elle permet de controller le labyrinthe.
+    /// </summary>
     public class MazeController
     {
         private readonly Grid grid;                                         //La grille d'affichage du labyrinthe
-        private Maze maze;
+        private Maze maze;                                                  //le labyrinthe
         private readonly Dictionary<Square, Rectangle> mazeRectangle;       //Les rectangles associés à leurs cases
-        private readonly List<Square> squareToDisplay;
-        private readonly List<IThreadDispatcher> threads;
+        private readonly List<Square> squareToDisplay;                      //Les cases à afficher dans le thread
+        private readonly List<IThreadDispatcher> threads;                   //Les Threads en court
 
         public MazeController(Maze maze, Grid grid)
         {
@@ -76,6 +78,9 @@ namespace MazeSolver.Ihm
             return value;
         }
 
+        /// <summary>
+        /// Méthode permettant la résolution du labyrinthe
+        /// </summary>
         public void ResolveMaze()
         {
             Dijkstra dijkstra = new Dijkstra(maze);
@@ -85,6 +90,10 @@ namespace MazeSolver.Ihm
             threads.Add(pathDisplayer);
         }
 
+        /// <summary>
+        /// Méthode permettant de réinitialiser le labyrinthe
+        /// </summary>
+        /// <param name="maze">Le nouveau labyrinthe</param>
         public void ResetMaze(Maze maze)
         {
             this.maze = maze;
@@ -178,10 +187,20 @@ namespace MazeSolver.Ihm
             return mazeRectangle.Values;
         }
 
+        /// <summary>
+        /// Accesseur du labyrinthe
+        /// </summary>
         public Maze Maze => maze;
 
+        /// <summary>
+        /// Accesseur de la liste d'affichage du thread
+        /// </summary>
         public List<Square> SquareToDisplay => squareToDisplay;
 
+        /// <summary>
+        /// Méthode permettant l'ajout dans la liste d'affichage du thread
+        /// </summary>
+        /// <param name="s">La cellule à ajouter</param>
         public void AddSquareToDisplay(Square s) => squareToDisplay.Add(s);
     }
 }

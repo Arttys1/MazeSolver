@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Windows.Shapes;
-using System.Windows.Media;
 using MazeSolver.Métier;
 
 namespace MazeSolver.Ihm.Thread
 {
+    /// <summary>
+    /// Classe Implémentant IThreadDispatcher. C'est un thread permettant d'afficher pas à pas la génération du labyrinthe
+    /// </summary>
     public class ModifySquareDispatcher : IThreadDispatcher
     {
         private readonly DispatcherTimer dispatcher;
@@ -40,17 +40,11 @@ namespace MazeSolver.Ihm.Thread
             }
         }
 
-        /// <summary>
-        /// Méthode permettant de commencer l'affichage
-        /// </summary>
         public void StartThread()
         {
             dispatcher.Start();
         }
 
-        /// <summary>
-        /// Méthode permettant l'arret du DispatcherTimer
-        /// </summary>
         public void StopThread()
         {
             dispatcher.Stop();

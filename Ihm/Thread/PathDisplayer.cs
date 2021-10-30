@@ -1,5 +1,4 @@
-﻿using MazeSolver.Ihm;
-using MazeSolver.Métier;
+﻿using MazeSolver.Métier;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -40,12 +39,6 @@ namespace MazeSolver.Ihm.Thread
             dispatcher.Interval = new TimeSpan(NANO_SECOND_TIMER);
         }
 
-        /// <summary>
-        /// Méthode permettant d'afficher un rectangle du chemin.
-        /// Elle sera Appelés plusieurs fois par le DispatcherTimer
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void Display(object sender, EventArgs e)
         {
             if (path.Count > 0)
@@ -76,17 +69,11 @@ namespace MazeSolver.Ihm.Thread
             }
         }
 
-        /// <summary>
-        /// Méthode permettant de commencer l'affichage
-        /// </summary>
         public void StartThread()
         {
             dispatcher.Start();
         }
 
-        /// <summary>
-        /// Méthode permettant l'arret du DispatcherTimer
-        /// </summary>
         public void StopThread()
         {
             dispatcher.Stop();

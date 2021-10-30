@@ -11,7 +11,7 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
         private readonly Maze maze;                     //labyrinthe
         private readonly List<Square> walls;            //les murs intérieurs du labyrinthe
         private readonly List<Square> paths;            //les cases parcourables du labyrinthe
-        private readonly MazeController mazeController;
+        private readonly MazeController mazeController; //L'intermédiaire en l'ihm et le model
 
         /// <summary>
         /// Constructeur
@@ -32,14 +32,29 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
         /// </summary>
         public abstract void CreateMaze();
 
-        protected Maze Maze => maze;        //Accesseur du labyrinthe 
+        /// <summary>
+        ///Accesseur du labyrinthe 
+        /// </summary>
+        protected Maze Maze => maze;
 
-        protected List<Square> Walls => walls;  //Accesseur des murs
+        /// <summary>
+        /// Accesseur des murs
+        /// </summary>
+        protected List<Square> Walls => walls;
 
-        protected List<Square> Paths => paths;  //Accesseur des cases parcourables
+        /// <summary>
+        /// Accesseur des cases parcourables
+        /// </summary>
+        protected List<Square> Paths => paths;  
 
+        /// <summary>
+        /// Accesseur du mazeController
+        /// </summary>
         protected MazeController MazeController => mazeController;
 
+        /// <summary>
+        /// Méthode permettant d'ajouter le départ à l'arriver à la liste d'affichage du thread
+        /// </summary>
         protected void AddStartEndToDisplayer()
         {
             MazeController.AddSquareToDisplay(Maze.Start);

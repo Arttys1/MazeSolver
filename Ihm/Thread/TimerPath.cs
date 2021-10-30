@@ -32,12 +32,6 @@ namespace MazeSolver.Métier.Thread
             startTime = DateTime.Now;
             dispatcherTimer.Start();
         }
-
-        /// <summary>
-        /// Méthode utilisé par le thread pour afficher le timer
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void Display(object sender, EventArgs e)
         {
             if(pathDisplayer.IsDispatching)

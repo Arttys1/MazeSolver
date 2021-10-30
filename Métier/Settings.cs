@@ -13,7 +13,7 @@ namespace MazeSolver.Métier
         private double mazeSize;                                        //représente le nombre de case d'un côté du labyrinthe
         private MazeBuildingAlgorithmType mazeBuildingAlgorithmType;    //représente quel algorithme de construction de labyrinthe va être utilisé.
         private bool isComplexMaze;                                     //représente si le labyrinthe sera "simple" ou "complexe" (chemin unique ou non)
-        private bool instantGeneration;
+        private bool instantGeneration;                                 //représente si le labyrinthe sera générer instannément ou s'il sera généré pas à pas
 
         /// <summary>
         /// Constructeur privée, accessible uniquement depuis la méthode getInstance.
@@ -50,9 +50,25 @@ namespace MazeSolver.Métier
             get => mazeSize;
             set { mazeSize = value; squareSize = System.Math.Round(500 / value); }
         }
-        public bool IsComplexMaze { get => isComplexMaze; set => isComplexMaze = value; } //Accesseur et mutateur de isComplexMaze
-        public double SquareSize { get => squareSize; } //Accesseur de SquareSize
-        public MazeBuildingAlgorithmType MazeBuildingAlgorithmType { get => mazeBuildingAlgorithmType; set => mazeBuildingAlgorithmType = value; }  //Accesseur et mmutateur de mazeBuildingAlgorithmType
+
+        /// <summary>
+        /// Accesseur et mutateur de isComplexMaze
+        /// </summary>
+        public bool IsComplexMaze { get => isComplexMaze; set => isComplexMaze = value; }
+
+        /// <summary>
+        /// Accesseur de SquareSize
+        /// </summary>
+        public double SquareSize { get => squareSize; }
+
+        /// <summary>
+        /// Accesseur et mutateur de mazeBuildingAlgorithmType
+        /// </summary>
+        public MazeBuildingAlgorithmType MazeBuildingAlgorithmType { get => mazeBuildingAlgorithmType; set => mazeBuildingAlgorithmType = value; }
+
+        /// <summary>
+        /// Accesseur et mutateur du booléen instantGeneration
+        /// </summary>
         public bool InstantGeneration { get => instantGeneration; set => instantGeneration = value; }
     }
 }

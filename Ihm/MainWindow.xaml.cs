@@ -1,8 +1,6 @@
 ﻿using MazeSolver.Ihm;
 using MazeSolver.Métier;
-using MazeSolver.Métier.Algorithme;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
-using MazeSolver.Métier.Thread;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +14,7 @@ namespace MazeSolver
     /// </summary>
     public partial class MainWindow : Window
     {  
-        private MazeController mazeController;
+        private readonly MazeController mazeController; //Intermédiaire entre l'ihm et le model
 
         /// <summary>
         /// Constructeur par défaut
@@ -148,6 +146,11 @@ namespace MazeSolver
             }
         }
 
+        /// <summary>
+        /// Méthode appelé à l'initialisation de la fenêtre remplissant la ComboBox des différents types d'algorithme
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InitAlgoType(object sender, System.EventArgs e)
         {
             CBAlgoType.Items.Clear();
@@ -158,6 +161,11 @@ namespace MazeSolver
             CBAlgoType.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Méthode appelé lors du changement du choix de l'algorithme de création
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AlgoTypeChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox cb)
@@ -175,6 +183,11 @@ namespace MazeSolver
             }
         }
 
+        /// <summary>
+        /// Méthode appelé lors du Chech ou du UnCheck de la CheckBox. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckInstantGeneration(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox checkBox)

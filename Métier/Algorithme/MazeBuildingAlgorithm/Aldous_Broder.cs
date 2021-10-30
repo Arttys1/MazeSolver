@@ -5,11 +5,15 @@ using System.Text;
 
 namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
 {
+    /// <summary>
+    /// Classe hérité de VisitingAlgorithm.
+    /// Elle permet de créer un labyrinthe selon l'algorithme d'Aldous-Broder.
+    /// Lien vers le wikipédia détaillant l'algorithme :
+    /// https://en.wikipedia.org/wiki/Maze_generation_algorithm
+    /// </summary>
     public class Aldous_Broder : VisitingAlgorithm
     {
-        public Aldous_Broder(MazeController mazeController, List<Square> walls, List<Square> paths) : base(mazeController, walls, paths)
-        {
-        }
+        public Aldous_Broder(MazeController mazeController, List<Square> walls, List<Square> paths) : base(mazeController, walls, paths) { }
 
         public override void CreateMaze()
         {

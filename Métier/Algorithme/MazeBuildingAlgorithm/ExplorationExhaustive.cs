@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
 {
     /// <summary>
-    /// Classe hérité de MazeBuildingAlgorithm.
+    /// Classe hérité de VisitingAlgorithm.
     /// Elle permet de créer un labyrinthe selon l'agorithme de l'exploration exhaustive.
     /// Lien vers un wikipédia détaillant l'algorithme:
     /// https://fr.wikipedia.org/wiki/Modélisation_mathématique_de_labyrinthe
