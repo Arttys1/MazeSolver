@@ -15,8 +15,8 @@ namespace MazeSolver
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        private Maze maze;      // le labyrinthe        
+    {  
+        private MazeController mazeController;
 
         /// <summary>
         /// Constructeur par défaut
@@ -24,7 +24,7 @@ namespace MazeSolver
         public MainWindow()
         {
             InitializeComponent();
-            maze = new Maze(grid);
+            mazeController = new MazeController(new Maze(), grid);
             AddMouseEnter();
         }
 
@@ -41,9 +41,7 @@ namespace MazeSolver
                 {
                     button.IsEnabled = false;
 
-                    maze.CreateRandomMaze(Settings.GetInstance().MazeBuildingAlgorithmType);
-
-                    maze.UpdateMaze();
+                    mazeController.CreateRandomMaze(Settings.GetInstance().MazeBuildingAlgorithmType);
                 }
                 catch (Exception x)
                 {
@@ -58,7 +56,7 @@ namespace MazeSolver
         /// </summary>
         private void AddMouseEnter()
         {
-            foreach (Rectangle rectangle in maze.GetAllRectangle())
+            foreach (Rectangle rectangle in mazeController.GetAllRectangle())
             {
                 rectangle.MouseEnter += Rectangle_MouseEnter;
             }
@@ -85,10 +83,7 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void ResolveMaze(object sender, RoutedEventArgs e)
         {
-            Dijkstra dijkstra = new Dijkstra(maze);
-            dijkstra.CalculDistanceMaze(maze.Start);
-            PathDisplayer pathDisplayer = new PathDisplayer(dijkstra.GetPath(maze.End), grid, maze);
-            pathDisplayer.StartThread();
+            mazeController.ResolveMaze();
         }
 
         /// <summary>
@@ -98,20 +93,12 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void ResetMaze(object sender, RoutedEventArgs e)
         {
-            maze = new Maze(grid);
-            AddMouseEnter();
-            ButtonRandomMaze.IsEnabled = true;
-        }
-
-        /// <summary>
-        /// Méthode permettant d'ouvrir la fenetre qui compare les deux algorithmes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CompareTwoAlgorithm(object sender, RoutedEventArgs e)
-        {
-            CompareWindow compareWindow = new CompareWindow();
-            compareWindow.Show();
+            if (mazeController != null)
+            {
+                mazeController.ResetMaze(new Maze());
+                AddMouseEnter();
+                ButtonRandomMaze.IsEnabled = true;
+            }
         }
 
         /// <summary>
@@ -121,24 +108,25 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox comboBox = (ComboBox)sender;
-            Settings settings = Settings.GetInstance();
-
-            switch (comboBox.SelectedIndex)
+            if (sender is ComboBox comboBox)
             {
-                case 0: settings.MazeSize = 11; break;
-                case 1: settings.MazeSize = 25; break;
-                case 2: settings.MazeSize = 51; break;
-                case 3: settings.MazeSize = 75; break;
-                case 4: settings.MazeSize = 101; break;
-                default: throw new System.Exception("SelectedIndex non-implémented !");
-            }
+                Settings settings = Settings.GetInstance();
 
-            if (SquareSizeLabel != null)
-            {
-                SquareSizeLabel.Content = settings.SquareSize;
+                settings.MazeSize = comboBox.SelectedIndex switch
+                {
+                    0 => 11,
+                    1 => 25,
+                    2 => 51,
+                    3 => 75,
+                    4 => 101,
+                    _ => throw new System.Exception("SelectedIndex non-implemented !"),
+                };
+                if (SquareSizeLabel != null)
+                {
+                    SquareSizeLabel.Content = settings.SquareSize;
+                }
+                ResetMaze(null, null);
             }
-            ResetMaze(null, null);
         }
 
         /// <summary>
@@ -182,7 +170,23 @@ namespace MazeSolver
                 } catch (Exception x)
                 {
                     MessageBox.Show(x.Message);
-                } 
+                    mazeController.ResetMaze(new Maze());
+                }
+            }
+        }
+
+        private void CheckInstantGeneration(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                if (checkBox.IsChecked == true)
+                {
+                    Settings.GetInstance().InstantGeneration = true;
+                }
+                else
+                {
+                    Settings.GetInstance().InstantGeneration = false;
+                }
             }
         }
     } 

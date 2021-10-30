@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MazeSolver.Ihm;
+using MazeSolver.Métier;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,17 +8,17 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace MazeSolver.Métier.Thread
+namespace MazeSolver.Ihm.Thread
 {
     /// <summary>
     /// Classe gérant la gestion de l'affichage du chemin
     /// </summary>
-    public class PathDisplayer
+    public class PathDisplayer : IThreadDispatcher
     {
         private readonly List<Square> path;                         //Chemin du labyrinthe
         private readonly DispatcherTimer dispatcher;                //Objet permettant d'afficher 1 à 1 les éléments du chemin
         private readonly Grid grid;                                 //Grille d'affichage
-        private readonly Maze maze;                                 //Labyrinthe concerné
+        private readonly MazeController mazeController;
         private bool isDispatching;                                 //booléen représentant si PathDiplayer est en fonctionnement ou non
         private const long NANO_SECOND_TIMER = 1000000;     // this * 100 ~= 0.1 second
                                                             // *100 because TimeSpan use ticks, 1 tick = 100 nanosecond
@@ -27,14 +29,14 @@ namespace MazeSolver.Métier.Thread
         /// <param name="path">Chemin pour résoudre la labyrinthe</param>
         /// <param name="grid">Grille d'affichage</param>
         /// <param name="maze">labyrinthe</param>
-        public PathDisplayer(List<Square> path, Grid grid, Maze maze)
+        public PathDisplayer(List<Square> path, Grid grid, MazeController mazeController)
         {
             this.grid = grid;
-            this.maze = maze;
+            this.mazeController = mazeController;
             this.path = path;
             isDispatching = true;
             dispatcher = new DispatcherTimer(DispatcherPriority.Normal);
-            dispatcher.Tick += new EventHandler(DisplayPath);
+            dispatcher.Tick += new EventHandler(Display);
             dispatcher.Interval = new TimeSpan(NANO_SECOND_TIMER);
         }
 
@@ -44,14 +46,14 @@ namespace MazeSolver.Métier.Thread
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DisplayPath(object sender, EventArgs e)
+        public void Display(object sender, EventArgs e)
         {
             if (path.Count > 0)
             {
                 Square square = path[0];
                 path.RemoveAt(0);
-                Rectangle r = maze.GetRectangle(square);
-                
+                Rectangle r = mazeController.GetRectangle(square);
+
                 if (r != null)
                 {
                     double squareSize = Math.Max(Settings.GetInstance().SquareSize / 3, 2);     //Side of these squares must be minimum 2.
@@ -85,7 +87,7 @@ namespace MazeSolver.Métier.Thread
         /// <summary>
         /// Méthode permettant l'arret du DispatcherTimer
         /// </summary>
-        private void StopThread()
+        public void StopThread()
         {
             dispatcher.Stop();
             isDispatching = false;

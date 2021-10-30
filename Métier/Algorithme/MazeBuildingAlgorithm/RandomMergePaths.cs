@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MazeSolver.Ihm;
+using System;
 using System.Collections.Generic;
 
 namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
@@ -12,13 +13,14 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
     public class RandomMergePaths : MazeBuildingAlgorithm
     {
 
+
         /// <summary>
         /// Constructeur
         /// </summary>
         /// <param name="maze">le labyrinthe</param>
         /// <param name="walls">les murs intérieurs du labyrinthe</param>
         /// <param name="paths">les cases parcourables du labyrinthe</param>
-        public RandomMergePaths(Maze maze, List<Square> walls, List<Square> paths) : base(maze, walls, paths) { }
+        public RandomMergePaths(MazeController mazeController, List<Square> walls, List<Square> paths) : base(mazeController, walls, paths) { }
         public override void CreateMaze()
         {
             while (!IsFinish())
@@ -26,6 +28,7 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
                 Square wall = Walls[new Random().Next(Walls.Count)];
                 OpenWall(wall);
             }
+            AddStartEndToDisplayer();
         }
 
         /// <summary>
@@ -56,6 +59,9 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
                     wall.Type = SquareType.PATH;
                     Paths.Add(wall);
                     Walls.Remove(wall);
+                    MazeController.AddSquareToDisplay(voisinA);
+                    MazeController.AddSquareToDisplay(voisinB);
+                    MazeController.AddSquareToDisplay(wall);
                     ContinuousPath(voisinA);
                     ContinuousPath(voisinB);
                 }

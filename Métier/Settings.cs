@@ -13,6 +13,7 @@ namespace MazeSolver.Métier
         private double mazeSize;                                        //représente le nombre de case d'un côté du labyrinthe
         private MazeBuildingAlgorithmType mazeBuildingAlgorithmType;    //représente quel algorithme de construction de labyrinthe va être utilisé.
         private bool isComplexMaze;                                     //représente si le labyrinthe sera "simple" ou "complexe" (chemin unique ou non)
+        private bool instantGeneration;
 
         /// <summary>
         /// Constructeur privée, accessible uniquement depuis la méthode getInstance.
@@ -23,6 +24,7 @@ namespace MazeSolver.Métier
             mazeSize = 25;
             mazeBuildingAlgorithmType = MazeBuildingAlgorithmType.ExhaustiveExploration;
             isComplexMaze = false;
+            instantGeneration = true;
         }
 
         /// <summary>
@@ -51,5 +53,6 @@ namespace MazeSolver.Métier
         public bool IsComplexMaze { get => isComplexMaze; set => isComplexMaze = value; } //Accesseur et mutateur de isComplexMaze
         public double SquareSize { get => squareSize; } //Accesseur de SquareSize
         public MazeBuildingAlgorithmType MazeBuildingAlgorithmType { get => mazeBuildingAlgorithmType; set => mazeBuildingAlgorithmType = value; }  //Accesseur et mmutateur de mazeBuildingAlgorithmType
+        public bool InstantGeneration { get => instantGeneration; set => instantGeneration = value; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MazeSolver.Ihm.Thread;
+using System;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -7,7 +8,7 @@ namespace MazeSolver.Métier.Thread
     /// <summary>
     /// Classe représentant un timer pour CompareWindow
     /// </summary>
-    public class TimerPath
+    public class TimerPath : IThreadDispatcher
     {
         private readonly PathDisplayer pathDisplayer;           //objet qui fait apparaitre le chemin
         private readonly Label timerLabel;                      //label affichant le timer
@@ -26,7 +27,7 @@ namespace MazeSolver.Métier.Thread
             this.pathDisplayer = pathDisplayer;
             this.timerLabel = label;
             this.dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal);
-            dispatcherTimer.Tick += new EventHandler(DispatchTime);
+            dispatcherTimer.Tick += new EventHandler(Display);
             dispatcherTimer.Interval = new TimeSpan(NANO_SECOND_TIMER);
             startTime = DateTime.Now;
             dispatcherTimer.Start();
@@ -37,7 +38,7 @@ namespace MazeSolver.Métier.Thread
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DispatchTime(object sender, EventArgs e)
+        public void Display(object sender, EventArgs e)
         {
             if(pathDisplayer.IsDispatching)
             {
@@ -47,8 +48,19 @@ namespace MazeSolver.Métier.Thread
             }
             else
             {
-                dispatcherTimer.Stop();
+                StopThread();
             }
         }
+
+        public void StartThread()
+        {
+            dispatcherTimer.Start();
+        }
+
+        public void StopThread()
+        {
+            dispatcherTimer.Stop();
+        }
+
     }
 }

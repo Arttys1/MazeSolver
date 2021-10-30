@@ -12,7 +12,7 @@
         <Label Name="CoordinatesLabel" Content="" HorizontalAlignment="Left" Margin="546,45,0,0" VerticalAlignment="Top"/>
         <Button Content="Resolve Maze" HorizontalAlignment="Left" Margin="614,386,0,0" VerticalAlignment="Top" Click="ResolveMaze" Width="90"/>
         <Button Content="Reset Maze" HorizontalAlignment="Left" Margin="754,386,0,0" VerticalAlignment="Top" Click="ResetMaze" Width="90"/>
-        <Button Content="Compare two algorithm" HorizontalAlignment="Left" Margin="750,118,0,0" VerticalAlignment="Top" Click="CompareTwoAlgorithm"/>
+        <Button Content="Compare two algorithm" HorizontalAlignment="Left" Margin="750,118,0,0" VerticalAlignment="Top"/>
         <GroupBox Header="Settings" Margin="594,92,0,221">
             <Label Content="Building Algorithm :" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,9,0,0"/>
 
@@ -30,5 +30,6 @@
         <Label Name="SquareSizeLabel" Content="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="846,237,0,0"></Label>
         <Label Content="Maze Solver !" FontSize="36" HorizontalAlignment="Left" Margin="623,19,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="CBAlgoType" HorizontalAlignment="Left" Margin="610,144,0,0" VerticalAlignment="Top" Width="120" Initialized="InitAlgoType" SelectionChanged="AlgoTypeChanged"/>
+        <CheckBox Content="Instant generation ?" IsChecked="true" HorizontalAlignment="Left" Margin="755,313,0,0" VerticalAlignment="Top" Unchecked="CheckInstantGeneration" Checked="CheckInstantGeneration"/>
     </Grid>
 </Window>

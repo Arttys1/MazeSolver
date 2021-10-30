@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MazeSolver.Ihm;
+using System;
 using System.Collections.Generic;
 
 namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
@@ -9,9 +10,8 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
     /// Lien vers un wikipédia détaillant l'algorithme:
     /// https://fr.wikipedia.org/wiki/Modélisation_mathématique_de_labyrinthe
     /// </summary>
-    public class ExplorationExhaustive : MazeBuildingAlgorithm
+    public class ExplorationExhaustive : VisitingAlgorithm
     {
-        private readonly Dictionary<Square, bool> estVisite;                //représente si les cases ont été visités ou non
         private readonly Dictionary<Square, Square> precedent;              //représente la case précendente.
 
         /// <summary>
@@ -20,23 +20,21 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
         /// <param name="maze">le labyrinthe</param>
         /// <param name="walls">les murs intérieurs du labyrinthe</param>
         /// <param name="paths">les cases parcourables du labyrinthe</param>
-        public ExplorationExhaustive(Maze maze, List<Square> walls, List<Square> paths) : base(maze, walls, paths)
+        public ExplorationExhaustive(MazeController mazeController, List<Square> walls, List<Square> paths) : base(mazeController, walls, paths)
         {
-            estVisite = new Dictionary<Square, bool>();
             precedent = new Dictionary<Square, Square>();
         }
-
         /// <summary>
         /// Méthode initialisant toutes les cases comme non visité
         /// </summary>
-        private void Initialisation()
+        private new void Initialisation()
         {
-            estVisite.Clear();
+            IsVisited.Clear();
             foreach (Square square in Paths)
             {
                 if (square != Maze.Start || square != Maze.End)
                 {
-                    estVisite.Add(square, false);
+                    IsVisited.Add(square, false);
                 }
             }
         }
@@ -49,6 +47,7 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
 
             Maze.Start.MazeNumber = Paths[0].MazeNumber;
             Maze.End.MazeNumber = Maze.Start.MazeNumber;
+            AddStartEndToDisplayer();
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
         private void MazeCreationRecursive(Square start)
         {
             List<Square> CasesVoisines = GetAdjacentsSquares(start);
-            estVisite[start] = true;
+            IsVisited[start] = true;
             Square nextSquare = CasesVoisines[new Random().Next(CasesVoisines.Count)];
             CombineTowSquare(start, nextSquare);
             precedent[nextSquare] = start;
@@ -80,7 +79,7 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
             if (start != actualSquare ) 
             {                
                 List<Square> CasesVoisines = GetAdjacentsSquares(actualSquare);
-                estVisite[actualSquare] = true;
+                IsVisited[actualSquare] = true;
 
                 if (CasesVoisines.Count != 0)
                 {
@@ -98,41 +97,12 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
         }
 
         /// <summary>
-        /// Méthode fusionnant deux case ainsi que le murs qui les séparent.
-        /// </summary>
-        /// <param name="a">Case à fusionner</param>
-        /// <param name="b">Case à fusionner</param>
-        private void CombineTowSquare(Square a, Square b)
-        {
-            Square wall = null;
-            foreach(Square VoisinA in a.Voisins)
-            {
-                foreach(Square VoisinB in b.Voisins)
-                {
-                    if(VoisinA == VoisinB)
-                    {
-                        wall = VoisinB;                        
-                    }                    
-                }
-            }
-
-            if(wall != null)
-            {
-                wall.Type = SquareType.PATH;
-                wall.MazeNumber = b.MazeNumber;
-                a.MazeNumber = b.MazeNumber;
-                Paths.Add(wall);
-                Walls.Remove(wall);
-            }
-        }
-
-        /// <summary>
         /// Méthode renvoyant les cases parcourables autour d'une case donnée.
         /// Elle renvoie seulement les cases parcourables et non visités
         /// </summary>
         /// <param name="square">case centrale</param>
         /// <returns>Les cases parcourables, non visités autour d'une case donnée</returns>
-        private List<Square> GetAdjacentsSquares(Square square)
+        private new List<Square> GetAdjacentsSquares(Square square)
         {
             List<Square> adjacentsSquares = new List<Square>();
             
@@ -144,7 +114,7 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
                 {
                     secondSquare = Maze.GetSquare(firstSquare.Coordinates.GetNeighbor(direction));
 
-                    if (secondSquare != null && !estVisite[secondSquare] && secondSquare.Type != SquareType.BORDURE)
+                    if (secondSquare != null && !IsVisited[secondSquare] && secondSquare.Type != SquareType.BORDURE)
                     {
                         adjacentsSquares.Add(secondSquare);
                     }
