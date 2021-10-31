@@ -24,6 +24,7 @@ namespace MazeSolver
             InitializeComponent();
             mazeController = new MazeController(new Maze(), grid);
             AddMouseEnter();
+            mazeController.AddChangeStartEnd();
         }
 
         /// <summary>
@@ -95,6 +96,7 @@ namespace MazeSolver
             {
                 mazeController.ResetMaze(new Maze());
                 AddMouseEnter();
+                mazeController.AddChangeStartEnd();
                 ButtonRandomMaze.IsEnabled = true;
             }
         }

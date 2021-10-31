@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Shapes;
 
 namespace MazeSolver.Métier
 {
@@ -110,14 +111,14 @@ namespace MazeSolver.Métier
             return value;
         }
         /// <summary>
-        /// Accesseur renvoyant la case de départ du labyrinthe
+        /// Accesseur et mutateur renvoyant la case de départ du labyrinthe
         /// </summary>
-        public Square Start => start;
+        public Square Start { get => start; set => start = value; }
 
         /// <summary>
-        /// //Accesseur renvoyant la case d'arrivé du labyrinthe
+        /// //Accesseur et mutateur renvoyant la case d'arrivé du labyrinthe
         /// </summary>
-        public Square End => end;       
+        public Square End { get => end; set => end = value; }       
 
         /// <summary>
         /// Accesseur renvoyant les murs du labyrinthe
@@ -142,6 +143,69 @@ namespace MazeSolver.Métier
                 walls.Remove(wall);
                 paths.Add(wall);
             }
+        }
+
+        /// <summary>
+        /// Méthode permettant de changer l'arrivé.
+        /// </summary>
+        /// <param name="r">Le rectangle qui sera la nouvelle arrivé</param>
+        /// <returns>La nouvelle et l'ancienne arrivé</returns>
+        public (Square, Square) ChangeEnd(Rectangle r)
+        {
+            return ChangeEntry(r, false);
+        }
+
+        /// <summary>
+        /// Méthode permettant de changer le départ.
+        /// </summary>
+        /// <param name="r">Le rectangle qui sera le nouveau départ</param>
+        /// <returns>Le nouveau et l'ancien départ</returns>
+        public (Square, Square) ChangeStart(Rectangle r)
+        {
+            return ChangeEntry(r, true);
+        }
+
+        /// <summary>
+        /// Méthode permettant de changer une entré.
+        /// </summary>
+        /// <param name="r">Le rectangle qui sera la nouvelle entré</param>
+        /// <param name="isStart">Booléen représentant si c'est le départ ou l'arrivé</param>
+        /// <returns>La nouvelle et l'ancienne entré</returns>
+        private (Square, Square) ChangeEntry(Rectangle r, bool isStart)
+        {
+            Square newEntry = GetSquareWithRectangle(r);
+            Square previousEntry;
+            if(isStart)
+            {
+                previousEntry = Start;
+                Start = newEntry;
+            }
+            else
+            {
+                previousEntry = End;
+                End = newEntry;
+            }
+            previousEntry.Type = SquareType.BORDURE;
+
+            newEntry.MazeNumber = Paths[0].MazeNumber;
+            newEntry.Type = SquareType.PATH;
+            return (newEntry, previousEntry);
+        }
+
+
+        /// <summary>
+        /// Méthode permettant de récupérer une case avec son rectangle correspondant. La méthode utilise les coordonnées du rectangle pour connaître sa case.
+        /// </summary>
+        /// <param name="r">Le rectangle de la case souhaité</param>
+        /// <returns>La case du rectangle en paramètre</returns>
+        private Square GetSquareWithRectangle(Rectangle r)
+        {
+            double squareSize = Settings.GetInstance().SquareSize;
+
+            int x = (int)((r.Margin.Left - 10) / squareSize);
+            int y = (int)((r.Margin.Top - 10) / squareSize);
+
+            return GetSquare(new Coordinates(x, y));
         }
     }
 }

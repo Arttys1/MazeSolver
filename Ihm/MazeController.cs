@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -18,7 +19,7 @@ namespace MazeSolver.Ihm
     {
         private readonly Grid grid;                                         //La grille d'affichage du labyrinthe
         private Maze maze;                                                  //le labyrinthe
-        private readonly Dictionary<Square, Rectangle> mazeRectangle;       //Les rectangles associés à leurs cases
+        private readonly Dictionary<Square, Rectangle> mazeRectangle;       //Les rectangles associés à leurs 
         private readonly List<Square> squareToDisplay;                      //Les cases à afficher dans le thread
         private readonly List<IThreadDispatcher> threads;                   //Les Threads en court
 
@@ -176,6 +177,54 @@ namespace MazeSolver.Ihm
                 threads.Add(modifySquareDispatcher);
                 modifySquareDispatcher.StartThread();
             }            
+        }
+
+        /// <summary>
+        /// Méthode permettant d'ajouter, à tous les rectangles en bordure, la fonctionnalité de déplacer le départ et l'arrivé.
+        /// </summary>
+        public void AddChangeStartEnd()
+        {
+            foreach(Square s in maze.GetAllSquares())
+            {
+                if(s.Type == SquareType.BORDURE)
+                {
+                    Rectangle r = GetRectangle(s);
+                    r.MouseLeftButtonDown += ChangeStart;
+                    r.MouseRightButtonDown += ChangeEnd;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Méthode permettant de changer l'arrivé. Survient lors d'un click droit sur une case en bordure.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeEnd(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is Rectangle r)
+            {
+                (Square, Square) squares = maze.ChangeEnd(r);
+                Rectangle previousEnd = GetRectangle(squares.Item2);
+                previousEnd.Fill = GetSquareFill(squares.Item2);
+                r.Fill = GetSquareFill(squares.Item1);
+            }
+        }
+
+        /// <summary>
+        /// Méthode permettant de changer le départ. Survient lors d'un click gauche sur une case en bordure
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeStart(object sender, MouseButtonEventArgs e)
+        {
+           if(sender is Rectangle r)
+            {
+                (Square, Square) squares = maze.ChangeStart(r);
+                Rectangle previousStart = GetRectangle(squares.Item2);
+                previousStart.Fill = GetSquareFill(squares.Item2);
+                r.Fill = GetSquareFill(squares.Item1);
+            }
         }
 
         /// <summary>
