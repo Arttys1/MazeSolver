@@ -78,9 +78,10 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
                 a.MazeNumber = b.MazeNumber;
                 Paths.Add(wall);
                 Walls.Remove(wall);
-                MazeController.AddSquareToDisplay(a);
-                MazeController.AddSquareToDisplay(b);
                 MazeController.AddSquareToDisplay(wall);
+                MazeController.AddSquareToDisplay(a);                
+                //MazeController.AddSquareToDisplay(b);
+                
             }
         }
 

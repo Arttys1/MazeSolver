@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using MazeSolver.Ihm;
+using System.Collections.Generic;
 
-namespace MazeSolver.Métier.Algorithme
+namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
 {
     /// <summary>
     /// Classe représentant l'algorithme de Dijkstra permettant de trouver le plus court chemin.
     /// </summary>
-    public class Dijkstra
+    public class Dijkstra : PathSearchAlgorithm
     {
-        private readonly Maze maze;                                 //labyrinthe
         private readonly Dictionary<Square, int> distances;         //Distance de chaque case
         private readonly Dictionary<Square, bool> estVisite;        //est-ce que les cases sont visités
         private readonly Dictionary<Square, Square> predecesseur;   //Predecesseur de chaque case
@@ -17,9 +17,9 @@ namespace MazeSolver.Métier.Algorithme
         /// Constructeur
         /// </summary>
         /// <param name="maze">le labyrinthe</param>
-        public Dijkstra(Maze maze)
+        public Dijkstra(MazeController mazeController) : base(mazeController)
         {
-            this.maze = maze;
+            
             distances = new Dictionary<Square, int>();
             estVisite = new Dictionary<Square, bool>();
             predecesseur = new Dictionary<Square, Square>();
@@ -32,7 +32,9 @@ namespace MazeSolver.Métier.Algorithme
         private void Initialisation(Square start)
         {
             distances.Clear();
-            foreach(Square square in maze.GetAllSquares())
+            estVisite.Clear();
+            predecesseur.Clear();
+            foreach (Square square in Maze.GetAllSquares())
             {
                 distances.Add(square, infini);
                 estVisite.Add(square, false);
@@ -50,7 +52,7 @@ namespace MazeSolver.Métier.Algorithme
             Square s = null;
             int distanceMin = infini;
 
-            foreach(Square square in maze.GetAllSquares())
+            foreach (Square square in Maze.GetAllSquares())
             {
                 if (!estVisite[square] && GetDistance(square) < distanceMin)
                 {
@@ -69,10 +71,13 @@ namespace MazeSolver.Métier.Algorithme
         /// <param name="b">Deuxieme case</param>
         private void Relachement(Square a, Square b)
         {
-            if(GetDistance(b) > GetDistance(a) + CoutMouvementVers(a))
+            if (GetDistance(b) > GetDistance(a) + CoutMouvementVers(a))
             {
                 SetDistance(b, GetDistance(a) + CoutMouvementVers(a));
                 SetPredecesseur(b, a);
+
+                MazeController.AddPathSearchSquares(b);                
+                MazeController.AddPathSearchSquares(a);                
             }
         }
 
@@ -89,7 +94,6 @@ namespace MazeSolver.Métier.Algorithme
             {
                 cout = infini;
             }
-
             return cout;
         }
 
@@ -97,23 +101,23 @@ namespace MazeSolver.Métier.Algorithme
         /// Méthode calculant la distance de chaque case du départ
         /// </summary>
         /// <param name="start">le départ</param>
-        public void CalculDistanceMaze(Square start)
+        public override void CalculDistanceMaze(Square start)
         {
             Initialisation(start);
             Square nearestSquare = GetNearestSquare();
 
-            while (nearestSquare != null)
+            while (nearestSquare != null && nearestSquare != Maze.End)
             {
                 estVisite[nearestSquare] = true;
 
-                foreach(Square voisin in nearestSquare.Voisins)
+                foreach (Square voisin in nearestSquare.Voisins)
                 {
                     Relachement(nearestSquare, voisin);
                 }
 
                 nearestSquare = GetNearestSquare();
             }
-            
+
         }
 
         /// <summary>
@@ -121,22 +125,22 @@ namespace MazeSolver.Métier.Algorithme
         /// </summary>
         /// <param name="end">représente la case jusqu'ou l'on souhaite allée</param>
         /// <returns>le chemin pour aller à une case donnée</returns>
-        public List<Square> GetPath(Square end)
+        public override List<Square> GetPath(Square end)
         {
             List<Square> path = new List<Square>() { end };
             Square pred = end;
-            
-            while(predecesseur[pred] != null)
+
+            while (predecesseur[pred] != null)
             {
                 path.Add(predecesseur[pred]);
                 pred = predecesseur[pred];
             }
 
-            path.Add(maze.Start);
+            path.Add(Maze.Start);
             path.Reverse();
             return path;
         }
-     
+
         /// <summary>
         /// Méthode permettant d'ajuster une distance dans le conteneurs
         /// </summary>

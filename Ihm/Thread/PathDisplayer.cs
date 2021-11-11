@@ -19,6 +19,7 @@ namespace MazeSolver.Ihm.Thread
         private readonly Grid grid;                                 //Grille d'affichage
         private readonly MazeController mazeController;
         private bool isDispatching;                                 //booléen représentant si PathDiplayer est en fonctionnement ou non
+        private PathSearchDisplay pathSearch = null;
         private const long NANO_SECOND_TIMER = 1000000;     // this * 100 ~= 0.1 second
                                                             // *100 because TimeSpan use ticks, 1 tick = 100 nanosecond
 
@@ -39,33 +40,42 @@ namespace MazeSolver.Ihm.Thread
             dispatcher.Interval = new TimeSpan(NANO_SECOND_TIMER);
         }
 
+        public PathDisplayer(List<Square> path, Grid grid, MazeController mazeController, PathSearchDisplay pathSearch) 
+                            : this(path, grid, mazeController)
+        {
+            this.pathSearch = pathSearch;
+        }
+
         public void Display(object sender, EventArgs e)
         {
-            if (path.Count > 0)
+            if (pathSearch == null || !pathSearch.IsDisplaying)
             {
-                Square square = path[0];
-                path.RemoveAt(0);
-                Rectangle r = mazeController.GetRectangle(square);
-
-                if (r != null)
+                if (path.Count > 0)
                 {
-                    double squareSize = Math.Max(Settings.GetInstance().SquareSize / 3, 2);     //Side of these squares must be minimum 2.
-                    Rectangle rectangle = new Rectangle
-                    {
-                        Height = squareSize,
-                        Width = squareSize,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Margin = new Thickness(r.Margin.Left + squareSize, r.Margin.Top + squareSize, 0, 0),
-                        Fill = Brushes.Red,
-                    };
+                    Square square = path[0];
+                    path.RemoveAt(0);
+                    Rectangle r = mazeController.GetRectangle(square);
 
-                    grid.Children.Add(rectangle);
+                    if (r != null)
+                    {
+                        double squareSize = Math.Max(Settings.GetInstance().SquareSize / 3, 2);     //Side of these squares must be minimum 2.
+                        Rectangle rectangle = new Rectangle
+                        {
+                            Height = squareSize,
+                            Width = squareSize,
+                            VerticalAlignment = VerticalAlignment.Top,
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            Margin = new Thickness(r.Margin.Left + squareSize, r.Margin.Top + squareSize, 0, 0),
+                            Fill = Brushes.Red,
+                        };
+
+                        grid.Children.Add(rectangle);
+                    }
                 }
-            }
-            else
-            {
-                StopThread();
+                else
+                {
+                    StopThread();
+                }
             }
         }
 

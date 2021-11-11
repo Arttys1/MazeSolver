@@ -20,15 +20,15 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
             Initialisation();
             Random r = new Random();
             Square currentCell;
-            Square nextCell;
-            while(!IsFinished())
+            Square nextCell = Paths[0];
+            while(IsVisited.ContainsKey(nextCell) &&  !IsFinished())
             {
                 currentCell = Paths[r.Next(Paths.Count)];
                 IsVisited[currentCell] = true;
                 List<Square> neighbors = GetAdjacentsSquares(currentCell);
                 nextCell = neighbors[r.Next(neighbors.Count)];
 
-                while (!IsVisited[nextCell])
+                while (IsVisited.ContainsKey(nextCell) && !IsVisited[nextCell])
                 {
                     CombineTowSquare(currentCell, nextCell);
                     IsVisited[nextCell] = true;

@@ -43,5 +43,11 @@ namespace MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm
             AddStartEndToDisplayer();
         }
 
+        protected override void CombineTowSquare(Square a, Square b)
+        {
+            base.CombineTowSquare(a, b);
+            MazeController.AddSquareToDisplay(b);
+        }
+
     }
 }

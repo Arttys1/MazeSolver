@@ -1,7 +1,7 @@
 ﻿using MazeSolver.Ihm.Thread;
 using MazeSolver.Métier;
-using MazeSolver.Métier.Algorithme;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
+using MazeSolver.Métier.Algorithme.PathSearchAlgorithm;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -21,6 +21,7 @@ namespace MazeSolver.Ihm
         private Maze maze;                                                  //le labyrinthe
         private readonly Dictionary<Square, Rectangle> mazeRectangle;       //Les rectangles associés à leurs 
         private readonly List<Square> squareToDisplay;                      //Les cases à afficher dans le thread
+        private readonly List<Square> pathSearchSquares;                    //Les cases regardées par les algorithmes du plus court chemin
         private readonly List<IThreadDispatcher> threads;                   //Les Threads en court
 
         public MazeController(Maze maze, Grid grid)
@@ -30,6 +31,7 @@ namespace MazeSolver.Ihm
             threads = new List<IThreadDispatcher>();
             mazeRectangle = new Dictionary<Square, Rectangle>();
             squareToDisplay = new List<Square>();
+            pathSearchSquares = new List<Square>();
             DisplayMaze();
         }
 
@@ -84,9 +86,15 @@ namespace MazeSolver.Ihm
         /// </summary>
         public void ResolveMaze()
         {
-            Dijkstra dijkstra = new Dijkstra(maze);
-            dijkstra.CalculDistanceMaze(maze.Start);
-            PathDisplayer pathDisplayer = new PathDisplayer(dijkstra.GetPath(maze.End), grid, this);
+            pathSearchSquares.Clear();
+            PathSearchAlgorithm algo = new Dijkstra(this);
+            algo.CalculDistanceMaze(maze.Start);
+
+            PathSearchDisplay pathSearchDisplay = new PathSearchDisplay(this);
+            pathSearchDisplay.StartThread();
+            threads.Add(pathSearchDisplay);
+
+            PathDisplayer pathDisplayer = new PathDisplayer(algo.GetPath(maze.End), grid, this, pathSearchDisplay);
             pathDisplayer.StartThread();
             threads.Add(pathDisplayer);
         }
@@ -133,7 +141,7 @@ namespace MazeSolver.Ihm
                         case 7: brush = Brushes.Chocolate; break;
                         case 8: brush = Brushes.DarkMagenta; break;
                         case 9: brush = Brushes.Cyan; break;
-                        case 10: brush = Brushes.Crimson; break;
+                        case 10: brush = Brushes.Orange; break;
                     }
                     break;
                 default: throw new Exception("not implemented type Square");
@@ -173,7 +181,7 @@ namespace MazeSolver.Ihm
             }
             else
             {
-                ModifySquareDispatcher modifySquareDispatcher = new ModifySquareDispatcher(this, mazeRectangle);
+                ModifySquareDispatcher modifySquareDispatcher = new ModifySquareDispatcher(this);
                 threads.Add(modifySquareDispatcher);
                 modifySquareDispatcher.StartThread();
             }            
@@ -251,5 +259,9 @@ namespace MazeSolver.Ihm
         /// </summary>
         /// <param name="s">La cellule à ajouter</param>
         public void AddSquareToDisplay(Square s) => squareToDisplay.Add(s);
+
+        public void AddPathSearchSquares(Square s) => pathSearchSquares.Add(s);
+
+        public List<Square> PathSearchSquares => pathSearchSquares;
     }
 }

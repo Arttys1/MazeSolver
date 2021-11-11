@@ -82,6 +82,14 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void ResolveMaze(object sender, RoutedEventArgs e)
         {
+            /*try
+            {
+                mazeController.ResolveMaze();
+            }
+            catch (Exception x)
+            {
+                MessageBox.Show(x.Message);
+            }*/
             mazeController.ResolveMaze();
         }
 
