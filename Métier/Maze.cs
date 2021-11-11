@@ -133,8 +133,9 @@ namespace MazeSolver.Métier
         /// <summary>
         /// Méthode détruisant 1/5ème des murs du labyrinthe. Cela permet d'avoir plusieurs chemins
         /// </summary>
-        public void ComplexifyMaze()
+        public List<Square> ComplexifyMaze()
         {
+            List<Square> w = new List<Square>();
             for (int i = 0; i < walls.Count / 5; i++)
             {
                 Square wall = walls[new Random().Next(walls.Count)];
@@ -142,7 +143,9 @@ namespace MazeSolver.Métier
                 wall.MazeNumber = paths[0].MazeNumber;
                 walls.Remove(wall);
                 paths.Add(wall);
+                w.Add(wall);
             }
+            return w;
         }
 
         /// <summary>

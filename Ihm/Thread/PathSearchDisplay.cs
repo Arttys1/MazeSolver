@@ -33,7 +33,7 @@ namespace MazeSolver.Ihm.Thread
             pathSearchSquares.Clear();
             foreach(Square s in mazeController.PathSearchSquares)
             {
-                if (s.Type == SquareType.PATH)
+                if (s.Type == SquareType.PATH && !pathSearchSquares.Contains(s))
                 {
                     pathSearchSquares.Add(s);
                     nbApparition.TryAdd(s, 0);
@@ -48,7 +48,7 @@ namespace MazeSolver.Ihm.Thread
                 Square square = pathSearchSquares[0];
                 pathSearchSquares.RemoveAt(0);                
                 Rectangle rectangle = mazeController.GetRectangle(square);
-                rectangle.Fill = getBrushes(square);              
+                rectangle.Fill = GetBrushes(square);              
             }
             else
             {
@@ -56,17 +56,17 @@ namespace MazeSolver.Ihm.Thread
             }
         }
 
-        private Brush getBrushes(Square square)
+        private Brush GetBrushes(Square square)
         {
             Brush b;
             switch(nbApparition[square])
             {
-                case 0: b = Brushes.LightCyan;  break;
-                case 1: b = Brushes.Cyan;  break;
-                case 2: b = Brushes.DarkCyan; break;
-                case 3: b = Brushes.LightBlue; break;
-                case 4: b = Brushes.Blue; break;
-                default: b = Brushes.DarkBlue; break;
+                case 0: b = Brushes.Cyan;  break;
+                case 1: b = Brushes.DarkCyan;  break;
+                case 2: b = Brushes.LightBlue; break;
+                case 3: b = Brushes.Blue; break;
+                case 4: b = Brushes.Black; break;
+                default: b = Brushes.Black; break;
             }
             nbApparition[square] = nbApparition[square] + 1;
             return b;

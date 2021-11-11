@@ -19,8 +19,8 @@ namespace MazeSolver.Ihm.Thread
         private readonly Grid grid;                                 //Grille d'affichage
         private readonly MazeController mazeController;
         private bool isDispatching;                                 //booléen représentant si PathDiplayer est en fonctionnement ou non
-        private PathSearchDisplay pathSearch = null;
-        private const long NANO_SECOND_TIMER = 1000000;     // this * 100 ~= 0.1 second
+        private readonly PathSearchDisplay pathSearch = null;
+        private const long NANO_SECOND_TIMER = 500000;     // this * 100 ~= 0.05 second
                                                             // *100 because TimeSpan use ticks, 1 tick = 100 nanosecond
 
         /// <summary>

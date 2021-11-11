@@ -1,6 +1,7 @@
 ﻿using MazeSolver.Ihm;
 using MazeSolver.Métier;
 using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
+using MazeSolver.Métier.Algorithme.PathSearchAlgorithm;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,15 +83,14 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void ResolveMaze(object sender, RoutedEventArgs e)
         {
-            /*try
+            try
             {
                 mazeController.ResolveMaze();
             }
             catch (Exception x)
             {
                 MessageBox.Show(x.Message);
-            }*/
-            mazeController.ResolveMaze();
+            }
         }
 
         /// <summary>
@@ -163,12 +163,19 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void InitAlgoType(object sender, System.EventArgs e)
         {
-            CBAlgoType.Items.Clear();
-            foreach (MazeBuildingAlgorithmType algo in Enum.GetValues(typeof(MazeBuildingAlgorithmType)))
+            if (sender is ComboBox comboBox)
             {
-                CBAlgoType.Items.Add(algo);
+                try
+                {
+                    comboBox.Items.Clear();
+                    comboBox.ItemsSource = Enum.GetValues(typeof(MazeBuildingAlgorithmType));
+                    comboBox.SelectedIndex = 0;
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show(x.Message);
+                }
             }
-            CBAlgoType.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -194,7 +201,7 @@ namespace MazeSolver
         }
 
         /// <summary>
-        /// Méthode appelé lors du Chech ou du UnCheck de la CheckBox. 
+        /// Méthode appelé lors du Check de la CheckBox. 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -202,14 +209,91 @@ namespace MazeSolver
         {
             if (sender is CheckBox checkBox)
             {
-                if (checkBox.IsChecked == true)
+                Settings.GetInstance().InstantGeneration = true;
+            }
+        }
+
+        /// <summary>
+        /// Méthode appelé lors de l'évenement uncheck de la checkBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UncheckInstantGeneration(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                Settings.GetInstance().InstantGeneration = false;
+            }
+        }
+
+        /// <summary>
+        /// Méthode initialisant la combo box 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InitCBPathSearchType(object sender, EventArgs e)
+        {
+            if (sender is ComboBox comboBox)
+            {
+                try
                 {
-                    Settings.GetInstance().InstantGeneration = true;
+                    comboBox.Items.Clear();
+                    comboBox.ItemsSource = Enum.GetValues(typeof(PathSearchAlgorithmType));
+                    comboBox.SelectedIndex = 0;
                 }
-                else
+                catch (Exception x)
                 {
-                    Settings.GetInstance().InstantGeneration = false;
+                    MessageBox.Show(x.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Méthode appelé lors du changement de selection de la combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PathSearchTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox cb)
+            {
+                try
+                {
+                    PathSearchAlgorithmType type = (PathSearchAlgorithmType)cb.SelectedItem;
+                    Settings.GetInstance().PathSearchAlgorithmType = type;
+
+                }
+                catch (Exception x)
+                {
+                    MessageBox.Show(x.Message);
+                    mazeController.ResetMaze(new Maze());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Méthode appelé lors de l'évenement check de la checkBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckInstantResolve(object sender, RoutedEventArgs e)
+        {
+            if(sender is CheckBox checkBox)
+            {
+                Settings.GetInstance().InstantResolve = true;
+            }
+        }
+
+        /// <summary>
+        /// Méthode appelé lors de l'évenement uncheck de la checkBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UncheckedInstantResolve(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                Settings.GetInstance().InstantResolve = false;
             }
         }
     } 

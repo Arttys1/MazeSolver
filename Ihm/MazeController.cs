@@ -87,14 +87,30 @@ namespace MazeSolver.Ihm
         public void ResolveMaze()
         {
             pathSearchSquares.Clear();
-            PathSearchAlgorithm algo = new Dijkstra(this);
+            Settings settings = Settings.GetInstance();
+            PathSearchAlgorithm algo;
+            switch (settings.PathSearchAlgorithmType)
+            {
+                case PathSearchAlgorithmType.Disktra: algo = new Dijkstra(this); break;
+                case PathSearchAlgorithmType.AStar: algo = new AStar(this); break;
+                default: throw new Exception("Unimplemented path search algorithm");
+            }
             algo.CalculDistanceMaze(maze.Start);
 
-            PathSearchDisplay pathSearchDisplay = new PathSearchDisplay(this);
-            pathSearchDisplay.StartThread();
-            threads.Add(pathSearchDisplay);
+            PathDisplayer pathDisplayer;
+            if (settings.InstantResolve)
+            {
+                pathDisplayer = new PathDisplayer(algo.GetPath(maze.End), grid, this);                
+            }
+            else
+            {
+                PathSearchDisplay pathSearchDisplay = new PathSearchDisplay(this);             
+                pathDisplayer = new PathDisplayer(algo.GetPath(maze.End), grid, this, pathSearchDisplay);
 
-            PathDisplayer pathDisplayer = new PathDisplayer(algo.GetPath(maze.End), grid, this, pathSearchDisplay);
+                pathSearchDisplay.StartThread();
+                threads.Add(pathSearchDisplay);
+            }
+
             pathDisplayer.StartThread();
             threads.Add(pathDisplayer);
         }
@@ -172,7 +188,11 @@ namespace MazeSolver.Ihm
             algorithm.CreateMaze();
             if (settings.IsComplexMaze)
             {
-                maze.ComplexifyMaze();
+                List<Square> walls = maze.ComplexifyMaze();
+                if(!settings.InstantGeneration)
+                {
+                    SquareToDisplay.AddRange(walls);
+                }
             }
 
             if(settings.InstantGeneration)
@@ -260,8 +280,15 @@ namespace MazeSolver.Ihm
         /// <param name="s">La cellule à ajouter</param>
         public void AddSquareToDisplay(Square s) => squareToDisplay.Add(s);
 
+        /// <summary>
+        /// Méthode permettant d'ajouter une case à la liste des cases a afficher 
+        /// </summary>
+        /// <param name="s"></param>
         public void AddPathSearchSquares(Square s) => pathSearchSquares.Add(s);
 
+        /// <summary>
+        /// Accesseur de la liste pathSearchSquares
+        /// </summary>
         public List<Square> PathSearchSquares => pathSearchSquares;
     }
 }

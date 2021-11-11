@@ -1,4 +1,5 @@
 ﻿using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
+using MazeSolver.Métier.Algorithme.PathSearchAlgorithm;
 
 namespace MazeSolver.Métier
 {
@@ -14,6 +15,8 @@ namespace MazeSolver.Métier
         private MazeBuildingAlgorithmType mazeBuildingAlgorithmType;    //représente quel algorithme de construction de labyrinthe va être utilisé.
         private bool isComplexMaze;                                     //représente si le labyrinthe sera "simple" ou "complexe" (chemin unique ou non)
         private bool instantGeneration;                                 //représente si le labyrinthe sera générer instannément ou s'il sera généré pas à pas
+        private PathSearchAlgorithmType pathSearchAlgorithmType;        //représente quel algorithme de plus court chemin sera utilisé
+        private bool instantResolve;                                    //représente si la résolution apparaitra instantanément ou non
 
         /// <summary>
         /// Constructeur privée, accessible uniquement depuis la méthode getInstance.
@@ -25,6 +28,8 @@ namespace MazeSolver.Métier
             mazeBuildingAlgorithmType = MazeBuildingAlgorithmType.ExhaustiveExploration;
             isComplexMaze = false;
             instantGeneration = true;
+            pathSearchAlgorithmType = PathSearchAlgorithmType.Disktra;
+            instantResolve = true;
         }
 
         /// <summary>
@@ -70,5 +75,15 @@ namespace MazeSolver.Métier
         /// Accesseur et mutateur du booléen instantGeneration
         /// </summary>
         public bool InstantGeneration { get => instantGeneration; set => instantGeneration = value; }
+
+        /// <summary>
+        /// Accesseur et mutatuer de pathSearchAlgorithmeType
+        /// </summary>
+        public PathSearchAlgorithmType PathSearchAlgorithmType { get => pathSearchAlgorithmType; set => pathSearchAlgorithmType = value; }
+
+        /// <summary>
+        /// Accesseur et mutateur du booléan instantResolve
+        /// </summary>
+        public bool InstantResolve { get => instantResolve; set => instantResolve = value; }
     }
 }

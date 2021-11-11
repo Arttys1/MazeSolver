@@ -10,7 +10,6 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
     {
         private readonly Dictionary<Square, int> distances;         //Distance de chaque case
         private readonly Dictionary<Square, bool> estVisite;        //est-ce que les cases sont visités
-        private readonly Dictionary<Square, Square> predecesseur;   //Predecesseur de chaque case
         private const int infini = int.MaxValue - 10000;            //Constante représentant l'infini
 
         /// <summary>
@@ -18,11 +17,9 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
         /// </summary>
         /// <param name="maze">le labyrinthe</param>
         public Dijkstra(MazeController mazeController) : base(mazeController)
-        {
-            
+        {            
             distances = new Dictionary<Square, int>();
             estVisite = new Dictionary<Square, bool>();
-            predecesseur = new Dictionary<Square, Square>();
         }
 
         /// <summary>
@@ -33,12 +30,12 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
         {
             distances.Clear();
             estVisite.Clear();
-            predecesseur.Clear();
+            Predecesseur.Clear();
             foreach (Square square in Maze.GetAllSquares())
             {
                 distances.Add(square, infini);
                 estVisite.Add(square, false);
-                predecesseur.Add(square, null);
+                Predecesseur.Add(square, null);
             }
             SetDistance(start, 0);
         }
@@ -76,8 +73,8 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
                 SetDistance(b, GetDistance(a) + CoutMouvementVers(a));
                 SetPredecesseur(b, a);
 
-                MazeController.AddPathSearchSquares(b);                
-                MazeController.AddPathSearchSquares(a);                
+                MazeController.AddPathSearchSquares(b);
+                MazeController.AddPathSearchSquares(a);
             }
         }
 
@@ -121,27 +118,6 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
         }
 
         /// <summary>
-        /// Méthode renvoyant le chemin pour aller à une case donnée
-        /// </summary>
-        /// <param name="end">représente la case jusqu'ou l'on souhaite allée</param>
-        /// <returns>le chemin pour aller à une case donnée</returns>
-        public override List<Square> GetPath(Square end)
-        {
-            List<Square> path = new List<Square>() { end };
-            Square pred = end;
-
-            while (predecesseur[pred] != null)
-            {
-                path.Add(predecesseur[pred]);
-                pred = predecesseur[pred];
-            }
-
-            path.Add(Maze.Start);
-            path.Reverse();
-            return path;
-        }
-
-        /// <summary>
         /// Méthode permettant d'ajuster une distance dans le conteneurs
         /// </summary>
         /// <param name="square">la case</param>
@@ -160,16 +136,6 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
         {
             distances.TryGetValue(square, out int value);
             return value;
-        }
-
-        /// <summary>
-        /// méthode permettant d'ajuster le predecesseur
-        /// </summary>
-        /// <param name="a">la case</param>
-        /// <param name="b">le predecesseur</param>
-        private void SetPredecesseur(Square a, Square b)
-        {
-            predecesseur[a] = b;
-        }
+        }        
     }
 }
