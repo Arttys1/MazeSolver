@@ -41,7 +41,7 @@ namespace MazeSolver
                 {
                     button.IsEnabled = false;
 
-                    mazeController.CreateRandomMaze(Settings.GetInstance().MazeBuildingAlgorithmType);
+                    mazeController.CreateRandomMaze(Settings.GetInstance().MazeBuildingAlgorithmType);                    
                 }
                 catch (Exception x)
                 {
@@ -207,7 +207,7 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void CheckInstantGeneration(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox)
+            if (sender is CheckBox)
             {
                 Settings.GetInstance().InstantGeneration = true;
             }
@@ -220,7 +220,7 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void UncheckInstantGeneration(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox)
+            if (sender is CheckBox)
             {
                 Settings.GetInstance().InstantGeneration = false;
             }
@@ -278,7 +278,7 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void CheckInstantResolve(object sender, RoutedEventArgs e)
         {
-            if(sender is CheckBox checkBox)
+            if(sender is CheckBox)
             {
                 Settings.GetInstance().InstantResolve = true;
             }
@@ -291,7 +291,7 @@ namespace MazeSolver
         /// <param name="e"></param>
         private void UncheckedInstantResolve(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox)
+            if (sender is CheckBox)
             {
                 Settings.GetInstance().InstantResolve = false;
             }

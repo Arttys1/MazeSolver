@@ -4,6 +4,7 @@ using MazeSolver.Métier.Algorithme.MazeBuildingAlgorithm;
 using MazeSolver.Métier.Algorithme.PathSearchAlgorithm;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -84,7 +85,7 @@ namespace MazeSolver.Ihm
         /// <summary>
         /// Méthode permettant la résolution du labyrinthe
         /// </summary>
-        public void ResolveMaze()
+        public async void ResolveMaze()
         {
             pathSearchSquares.Clear();
             Settings settings = Settings.GetInstance();
@@ -95,7 +96,9 @@ namespace MazeSolver.Ihm
                 case PathSearchAlgorithmType.AStar: algo = new AStar(this); break;
                 default: throw new Exception("Unimplemented path search algorithm");
             }
-            algo.CalculDistanceMaze(maze.Start);
+            await Task.Run(() =>
+                algo.CalculDistanceMaze(maze.Start)
+            );
 
             PathDisplayer pathDisplayer;
             if (settings.InstantResolve)
@@ -171,7 +174,7 @@ namespace MazeSolver.Ihm
         /// 2 algorithmes ont été implémentés dans le programme.
         /// </summary>
         /// <param name="mazeBuildingAlgorithmType">L'algorithme qui créera le labyrinthe</param>
-        public void CreateRandomMaze(MazeBuildingAlgorithmType mazeBuildingAlgorithmType)
+        public async void CreateRandomMaze(MazeBuildingAlgorithmType mazeBuildingAlgorithmType)
         {
             MazeBuildingAlgorithm algorithm;
             Settings settings = Settings.GetInstance();
@@ -184,8 +187,9 @@ namespace MazeSolver.Ihm
                 case MazeBuildingAlgorithmType.Wilson: algorithm = new Wilson(this, maze.Walls, maze.Paths); break;
                 default: throw new Exception("Unimplemented maze solving algorithm");
             }
-
-            algorithm.CreateMaze();
+            await Task.Run(() =>
+                algorithm.CreateMaze()
+            );
             if (settings.IsComplexMaze)
             {
                 List<Square> walls = maze.ComplexifyMaze();
