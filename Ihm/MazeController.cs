@@ -94,6 +94,7 @@ namespace MazeSolver.Ihm
             {
                 case PathSearchAlgorithmType.Disktra: algo = new Dijkstra(this); break;
                 case PathSearchAlgorithmType.AStar: algo = new AStar(this); break;
+                case PathSearchAlgorithmType.BreadFirst: algo = new BreadFirst(this); break;
                 default: throw new Exception("Unimplemented path search algorithm");
             }
             await Task.Run(() =>

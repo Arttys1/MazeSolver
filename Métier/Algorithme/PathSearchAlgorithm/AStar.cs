@@ -6,6 +6,8 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
     /// <summary>
     /// Classe, hérité de PathSearchAlgorithm, représentant l'algorithme de A*.
     /// Cet algorithme est une amélioration de Dijkstra.
+    /// Lien vers le wikipédia détaillant l'algorithme : 
+    /// "https://fr.wikipedia.org/wiki/Algorithme_A*"
     /// </summary>
     public class AStar : PathSearchAlgorithm
     {

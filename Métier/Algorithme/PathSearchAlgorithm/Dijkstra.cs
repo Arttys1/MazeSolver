@@ -5,6 +5,8 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
 {
     /// <summary>
     /// Classe représentant l'algorithme de Dijkstra permettant de trouver le plus court chemin.
+    /// Lien vers le wikipédia détaillant l'algorithme :
+    /// https://fr.wikipedia.org/wiki/Algorithme_de_Dijkstra
     /// </summary>
     public class Dijkstra : PathSearchAlgorithm
     {
