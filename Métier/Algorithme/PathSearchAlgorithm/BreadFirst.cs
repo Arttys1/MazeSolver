@@ -12,7 +12,7 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
     /// </summary>
     class BreadFirst : PathSearchAlgorithm
     {
-        private Dictionary<Square, bool> isVisited;
+        private readonly Dictionary<Square, bool> isVisited;
 
         public BreadFirst(MazeController mazeController) : base(mazeController)
         {
@@ -26,21 +26,20 @@ namespace MazeSolver.Métier.Algorithme.PathSearchAlgorithm
 
         public override void CalculDistanceMaze(Square start)
         {
-            List<Square> squares = new List<Square>();
+            Queue<Square> squares = new Queue<Square>();
             Square square = start;
 
-            squares.Add(square);
+            squares.Enqueue(square);
             isVisited[square] = true;
             while(squares.Count != 0 && square != Maze.End)
             {
-                square = squares[0];
+                square = squares.Dequeue();
                 MazeController.AddPathSearchSquares(square);
-                squares.RemoveAt(0);
                 foreach(Square voisin in square.Voisins)
                 {
                     if(voisin.Type == SquareType.PATH && !isVisited[voisin])
                     {
-                        squares.Add(voisin);
+                        squares.Enqueue(voisin);
                         isVisited[voisin] = true;
                         SetPredecesseur(voisin, square);
                     }
